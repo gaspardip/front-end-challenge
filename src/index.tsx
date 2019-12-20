@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { createGlobalStyle } from 'styled-components';
+import { SWRConfig } from 'swr';
 import { store } from './app/store';
 import './bootstrap';
-import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -18,8 +19,17 @@ const render = () => {
 
   ReactDOM.render(
     <Provider store={store}>
-      <GlobalStyle />
-      <App />
+      <SWRConfig
+        value={{
+          refreshInterval: 0,
+          refreshWhenHidden: false,
+          refreshWhenOffline: false,
+          shouldRetryOnError: false
+        }}
+      >
+        <GlobalStyle />
+        <App />
+      </SWRConfig>
     </Provider>,
     document.getElementById('root')
   );

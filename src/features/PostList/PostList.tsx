@@ -1,9 +1,16 @@
+import { Error } from 'components/Error';
+import { Spinner } from 'components/Spinner';
 import { PostListItem } from 'features/PostList';
+import { useCancellableSWR } from 'hooks/useCancellableSWR';
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import useSWR, { useSWRPages } from 'swr';
+import { useSWRPages } from 'swr';
 import { RedditPostListing } from 'typings';
-import { fetcher, topURL } from 'utils';
+import { topURL } from 'utils';
+
+const searchParams = new URLSearchParams({
+  limit: '50'
+});
 
 export const PostList = () => {
   const { pages, isLoadingMore, loadMore } = useSWRPages<
@@ -12,17 +19,21 @@ export const PostList = () => {
   >(
     'reddit',
     ({ offset, withSWR }) => {
-      const searchParams = new URLSearchParams({
-        limit: '50'
-      });
-
-      if (offset) searchParams.set('after', offset);
+      if (offset) {
+        searchParams.set('after', offset);
+      }
 
       const url = `${topURL}?${searchParams.toString()}`;
 
-      const { data } = withSWR(useSWR(url, fetcher, { refreshInterval: 0 })); // eslint-disable-line
+      const { data, error, revalidate } = withSWR(useCancellableSWR(url)); // eslint-disable-line
 
-      if (!data) return null;
+      if (error) {
+        return <Error tryAgain={revalidate} />;
+      }
+
+      if (!data) {
+        return <Spinner />;
+      }
 
       const {
         data: { children }

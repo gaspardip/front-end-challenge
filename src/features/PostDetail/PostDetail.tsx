@@ -1,26 +1,30 @@
 import { selectCurrentPost } from 'app/selectors';
+import { Error } from 'components/Error';
+import { Spinner } from 'components/Spinner';
+import { useCancellableSWR } from 'hooks/useCancellableSWR';
 import React from 'react';
-import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import useSWR from 'swr';
 import { RedditPostDetail } from 'typings';
-import { fetcher, redditURL } from 'utils';
+import { redditURL } from 'utils';
 
 export const PostDetail = () => {
   const currentPost = useSelector(selectCurrentPost);
-  const { data, error } = useSWR<RedditPostDetail>(
-    currentPost ? `${redditURL}${currentPost}.json` : null,
-    fetcher,
-    { refreshInterval: 0 }
+  const { data, error, revalidate } = useCancellableSWR<RedditPostDetail>(
+    currentPost ? `${redditURL}${currentPost}.json` : null
   );
 
   if (!currentPost) {
     return <NoCurrentPost>Select a post to view details</NoCurrentPost>;
   }
 
+  if (error) {
+    return <Error tryAgain={revalidate} />;
+  }
+
   if (!data) {
-    return <Spinner animation="border" className="d-block mx-auto" />;
+    return <Spinner />;
   }
 
   const [postListing, commentsListing] = data;

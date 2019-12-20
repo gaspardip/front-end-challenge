@@ -54,15 +54,29 @@ export const PostListItem = ({
           <ColAuto>
             <Row>
               <Col>
-                <img src={ArrowUp} width="24" height="24" alt="Arrow up" />
+                <img
+                  src={ArrowUp}
+                  width="24"
+                  height="24"
+                  alt="Arrow up"
+                  className="d-block mx-auto"
+                />
               </Col>
             </Row>
             <Row>
-              <Col>{formattedScore}</Col>
+              <Col>
+                <span className="d-block mx-auto">{formattedScore}</span>
+              </Col>
             </Row>
             <Row>
               <Col>
-                <img src={ArrowDown} width="24" height="24" alt="Arrow down" />
+                <img
+                  src={ArrowDown}
+                  width="24"
+                  height="24"
+                  alt="Arrow down"
+                  className="d-block mx-auto"
+                />
               </Col>
             </Row>
           </ColAuto>

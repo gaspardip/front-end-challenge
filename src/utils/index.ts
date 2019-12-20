@@ -3,8 +3,6 @@ import { formatDistanceStrict, fromUnixTime } from 'date-fns';
 export const redditURL = 'https://www.reddit.com';
 export const topURL = `${redditURL}/top.json`;
 
-export const fetcher = (url: string) => fetch(url).then(r => r.json());
-
 export const formatPostCreationDate = (ms: number) => {
   const now = Date.now();
   const created = fromUnixTime(ms);
