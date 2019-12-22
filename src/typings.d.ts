@@ -14,6 +14,11 @@ export interface RedditPost extends RedditContent {
   url: string;
   post_hint: string;
   selftext: string;
+  preview: {
+    reddit_video_preview: {
+      fallback_url: string;
+    };
+  };
   secure_media: {
     reddit_video: {
       fallback_url: string;

@@ -6,10 +6,10 @@ import { Col, Container, Row } from 'react-bootstrap';
 export const App = () => (
   <Container className="p-3" fluid>
     <Row>
-      <Col xs={6}>
+      <Col lg={6} xs={12} className="mb-4">
         <PostList />
       </Col>
-      <Col xs={6}>
+      <Col lg={6} xs={12}>
         <PostDetail />
       </Col>
     </Row>

@@ -94,7 +94,7 @@ export const PostList = () => {
         <Card.Body>
           <StickyButtonGroup>
             <Button onClick={loadMore} disabled={isLoadingMore}>
-              Load more
+              Load more (+50)
             </Button>
             <Button onClick={handleDismissAll} variant="danger">
               Dismiss all

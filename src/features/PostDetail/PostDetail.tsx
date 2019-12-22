@@ -9,7 +9,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RedditPost, RedditPostDetail } from 'typings';
-import { decodeHTML, formatK, redditURL } from 'utils';
+import { formatK, redditURL } from 'utils';
 
 export const PostDetail = () => (
   <StickyCard>
@@ -47,11 +47,13 @@ const PostDetailWrapped = () => {
 
   const { title, subreddit_name_prefixed, author, num_comments } = post;
 
+  const formattedNumComments = formatK(num_comments);
+
   const someCommenters = commentsListing.data.children
     .slice(0, 3)
     .map((x, i) => (
       <>
-        <AuthorLink author={x.data.author} />
+        <AuthorLink key={x.data.author} author={x.data.author} />
         {i < 2 ? ', ' : ''}
       </>
     ));
@@ -68,8 +70,8 @@ const PostDetailWrapped = () => {
           <hr />
           <PostDetailContent post={post} />
           <hr />
-          <strong>{formatK(num_comments)}</strong> comments from{' '}
-          {someCommenters} and more users!
+          <strong>{formattedNumComments}</strong> comments from {someCommenters}{' '}
+          and more users!
         </Col>
       </Row>
     </Container>
@@ -81,27 +83,24 @@ interface PostDetailContentProps {
 }
 
 const PostDetailContent = ({
-  post: { post_hint, title, url, secure_media, media, selftext }
+  post: { post_hint, title, url, preview, media, selftext }
 }: PostDetailContentProps) => {
   switch (post_hint) {
     case 'image':
       return <img src={url} className="img-fluid" alt={title} />;
 
     case 'hosted:video':
-      return (
-        <video controls autoPlay loop>
-          <source
-            src={secure_media.reddit_video.fallback_url}
-            type="video/mp4"
-          />
-        </video>
-      );
-
+    case 'link':
     case 'rich:video':
       return (
-        <div
-          dangerouslySetInnerHTML={{ __html: decodeHTML(media.oembed.html) }}
-        />
+        <div className="embed-responsive embed-responsive-1by1">
+          <video controls autoPlay loop className="embed-responsive-item">
+            <source
+              src={preview.reddit_video_preview.fallback_url}
+              type="video/mp4"
+            />
+          </video>
+        </div>
       );
 
     default:

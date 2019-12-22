@@ -9,6 +9,7 @@ import { ReactComponent as Trash } from 'bootstrap-icons/icons/trash.svg';
 import classnames from 'classnames';
 import { AuthorLink } from 'components/AuthorLink';
 import { WrapIf } from 'components/WrapIf';
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { forwardRef } from 'react';
 import { Badge, Button, Col, Media, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,10 +48,6 @@ export const PostListItem = forwardRef<HTMLLIElement, PostListItemProps>(
       selectPostState(state, id)
     );
 
-    if (dismissed) {
-      return null;
-    }
-
     const dispatchViewPost = () => {
       dispatch(viewPost({ id, permalink }));
     };
@@ -66,83 +63,98 @@ export const PostListItem = forwardRef<HTMLLIElement, PostListItemProps>(
     const formattedNumComments = formatK(num_comments);
 
     return (
-      <CustomMedia onClick={dispatchViewPost} ref={ref}>
-        <Media.Body>
-          <Row>
-            <ColAuto className="pr-0">
+      <AnimatePresence>
+        {!dismissed && (
+          <CustomMedia
+            onClick={dispatchViewPost}
+            ref={ref}
+            variants={{
+              visible: { opacity: 1, height: 'auto' },
+              hidden: { opacity: 0, height: 0 }
+            }}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            <CustomMediaBody>
               <Row>
+                <ColAuto className="pr-0">
+                  <Row>
+                    <Col>
+                      <img
+                        src={ArrowUp}
+                        width="24"
+                        height="24"
+                        alt="Arrow up"
+                        className="d-block mx-auto"
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <span className="d-block mx-auto">{formattedScore}</span>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <img
+                        src={ArrowDown}
+                        width="24"
+                        height="24"
+                        alt="Arrow down"
+                        className="d-block mx-auto"
+                      />
+                    </Col>
+                  </Row>
+                </ColAuto>
+                <ColAuto className="pr-0">
+                  <WrapIf
+                    condition={!hasDefaultThumb && post_hint === 'image'}
+                    renderWithWrapper={children => (
+                      <a href={url} target="_blank" rel="noopener noreferrer">
+                        {children}
+                      </a>
+                    )}
+                  >
+                    <img
+                      width={64}
+                      height={64}
+                      className="mr-3"
+                      src={hasDefaultThumb ? defaultImage : thumbnail}
+                      alt={title}
+                    />
+                  </WrapIf>
+                </ColAuto>
                 <Col>
-                  <img
-                    src={ArrowUp}
-                    width="24"
-                    height="24"
-                    alt="Arrow up"
-                    className="d-block mx-auto"
-                  />
+                  <h5 className="mt-0 mb-1">
+                    {title}{' '}
+                    {!viewed && (
+                      <Badge variant="success" pill>
+                        New
+                      </Badge>
+                    )}
+                  </h5>
+                  <StyledP>
+                    <strong>{subreddit_name_prefixed}</strong> - Posted by{' '}
+                    <AuthorLink author={author} /> {formattedCreationDate}
+                  </StyledP>
+                  <StyledP>{formattedNumComments} comments</StyledP>
                 </Col>
+                <ColAuto>
+                  <TrashButton
+                    type="button"
+                    variant="outline-danger"
+                    onClick={handleDismiss}
+                  >
+                    <Trash />
+                  </TrashButton>
+                </ColAuto>
               </Row>
-              <Row>
-                <Col>
-                  <span className="d-block mx-auto">{formattedScore}</span>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <img
-                    src={ArrowDown}
-                    width="24"
-                    height="24"
-                    alt="Arrow down"
-                    className="d-block mx-auto"
-                  />
-                </Col>
-              </Row>
-            </ColAuto>
-            <ColAuto className="pr-0">
-              <WrapIf
-                condition={!hasDefaultThumb && post_hint === 'image'}
-                renderWithWrapper={children => (
-                  <a href={url} target="_blank" rel="noopener noreferrer">
-                    {children}
-                  </a>
-                )}
-              >
-                <img
-                  width={64}
-                  height={64}
-                  className="mr-3"
-                  src={hasDefaultThumb ? defaultImage : thumbnail}
-                  alt={title}
-                />
-              </WrapIf>
-            </ColAuto>
-            <Col>
-              <h5 className="mt-0 mb-1">
-                {title}{' '}
-                {!viewed && (
-                  <Badge variant="success" pill>
-                    New
-                  </Badge>
-                )}
-              </h5>
-              <StyledP>
-                <strong>{subreddit_name_prefixed}</strong> - Posted by{' '}
-                <AuthorLink author={author} /> {formattedCreationDate}
-              </StyledP>
-              <StyledP>{formattedNumComments} comments</StyledP>
-            </Col>
-            <ColAuto>
-              <TrashButton
-                type="button"
-                variant="outline-danger"
-                onClick={handleDismiss}
-              >
-                <Trash />
-              </TrashButton>
-            </ColAuto>
-          </Row>
-        </Media.Body>
-      </CustomMedia>
+            </CustomMediaBody>
+          </CustomMedia>
+        )}
+      </AnimatePresence>
     );
   }
 );
@@ -164,15 +176,18 @@ const ColAuto = styled.div.attrs(props => ({
   className: classnames(props.className, 'col-auto my-auto')
 }))``;
 
-const CustomMedia = styled.li.attrs(props => ({
+const CustomMedia = styled(motion.li).attrs(props => ({
   ...props,
   className: 'media'
 }))`
   cursor: pointer;
-  padding: 5px 0;
-  min-height: 75px;
 
   &:not(:last-child) {
     border-bottom: 1px solid #dee2e6 !important;
   }
+`;
+
+const CustomMediaBody = styled(Media.Body)`
+  min-height: 75px;
+  padding: 5px 0;
 `;
