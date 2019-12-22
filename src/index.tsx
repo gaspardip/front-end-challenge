@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createGlobalStyle } from 'styled-components';
 import { SWRConfig } from 'swr';
-import { store } from './app/store';
+import { store } from './app/redux/store';
 import './bootstrap';
 
 const GlobalStyle = createGlobalStyle`
@@ -14,19 +14,21 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const swrConfig = {
+  refreshInterval: 0,
+  refreshWhenHidden: false,
+  refreshWhenOffline: false,
+  shouldRetryOnError: false,
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false
+};
+
 const render = () => {
   const { App } = require('./app/App');
 
   ReactDOM.render(
     <Provider store={store}>
-      <SWRConfig
-        value={{
-          refreshInterval: 0,
-          refreshWhenHidden: false,
-          refreshWhenOffline: false,
-          shouldRetryOnError: false
-        }}
-      >
+      <SWRConfig value={swrConfig}>
         <GlobalStyle />
         <App />
       </SWRConfig>

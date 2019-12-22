@@ -1,15 +1,25 @@
-import { selectCurrentPost } from 'app/selectors';
+import { selectCurrentPost } from 'app/redux/selectors';
+import { AuthorLink } from 'components/AuthorLink';
 import { Error } from 'components/Error';
 import { Spinner } from 'components/Spinner';
+import { StickyCard } from 'components/StickyCard';
 import { useCancellableSWR } from 'hooks/useCancellableSWR';
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Card, Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { RedditPostDetail } from 'typings';
-import { redditURL } from 'utils';
+import { RedditPost, RedditPostDetail } from 'typings';
+import { decodeHTML, formatK, redditURL } from 'utils';
 
-export const PostDetail = () => {
+export const PostDetail = () => (
+  <StickyCard>
+    <Card.Body>
+      <PostDetailWrapped />
+    </Card.Body>
+  </StickyCard>
+);
+
+const PostDetailWrapped = () => {
   const currentPost = useSelector(selectCurrentPost);
   const { data, error, revalidate } = useCancellableSWR<RedditPostDetail>(
     currentPost ? `${redditURL}${currentPost}.json` : null
@@ -28,27 +38,75 @@ export const PostDetail = () => {
   }
 
   const [postListing, commentsListing] = data;
+
   const {
     data: {
-      children: [
-        {
-          data: { url, title }
-        }
-      ]
+      children: [{ data: post }]
     }
   } = postListing;
 
+  const { title, subreddit_name_prefixed, author, num_comments } = post;
+
+  const someCommenters = commentsListing.data.children
+    .slice(0, 3)
+    .map((x, i) => (
+      <>
+        <AuthorLink author={x.data.author} />
+        {i < 2 ? ', ' : ''}
+      </>
+    ));
+
   return (
     <Container fluid>
-      <Row>
-        <Col xs="6" className="mx-auto">
-          <h5 className="text-center">{title}</h5>
+      <Row className="justify-content-center">
+        <Col xs="7" className="text-center">
+          <h6>
+            <strong>{subreddit_name_prefixed}</strong>- Posted by {author}
+          </h6>
           <hr />
-          <img src={url} className="img-fluid" alt={title} />
+          <h5>{title}</h5>
+          <hr />
+          <PostDetailContent post={post} />
+          <hr />
+          <strong>{formatK(num_comments)}</strong> comments from{' '}
+          {someCommenters} and more users!
         </Col>
       </Row>
     </Container>
   );
+};
+
+interface PostDetailContentProps {
+  post: RedditPost;
+}
+
+const PostDetailContent = ({
+  post: { post_hint, title, url, secure_media, media, selftext }
+}: PostDetailContentProps) => {
+  switch (post_hint) {
+    case 'image':
+      return <img src={url} className="img-fluid" alt={title} />;
+
+    case 'hosted:video':
+      return (
+        <video controls autoPlay loop>
+          <source
+            src={secure_media.reddit_video.fallback_url}
+            type="video/mp4"
+          />
+        </video>
+      );
+
+    case 'rich:video':
+      return (
+        <div
+          dangerouslySetInnerHTML={{ __html: decodeHTML(media.oembed.html) }}
+        />
+      );
+
+    default:
+      return <>{selftext && <p>{selftext}</p>}</>;
+  }
 };
 
 const NoCurrentPost = styled.h2`

@@ -12,4 +12,11 @@ export const formatPostCreationDate = (ms: number) => {
   return `${distance} ago`;
 };
 
-export const formatK = (score: number) => `${(score / 1000).toFixed(1)}k`;
+export const formatK = (score: number) =>
+  score > 1000 ? `${(score / 1000).toFixed(1)}k` : score.toString();
+
+export const decodeHTML = (html: string) => {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+};

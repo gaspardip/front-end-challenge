@@ -12,6 +12,18 @@ export interface RedditPost extends RedditContent {
   thumbnail: 'nsfw' | 'default' | 'self' | string;
   num_comments: number;
   url: string;
+  post_hint: string;
+  selftext: string;
+  secure_media: {
+    reddit_video: {
+      fallback_url: string;
+    };
+  };
+  media: {
+    oembed: {
+      html: string;
+    };
+  };
 }
 
 export interface ReddtiComment extends RedditContent {

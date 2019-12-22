@@ -16,7 +16,9 @@ const currentPostSlice = createSlice({
       const {
         payload: { permalink }
       } = action;
+
       const currentPost = permalink.slice(0, -1); // delete slash
+
       return currentPost;
     }
   }
