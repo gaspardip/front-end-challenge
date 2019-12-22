@@ -14,8 +14,9 @@ export interface RedditPost extends RedditContent {
   url: string;
   post_hint: string;
   selftext: string;
+  domain: string;
   preview: {
-    reddit_video_preview: {
+    reddit_video_preview?: {
       fallback_url: string;
     };
   };

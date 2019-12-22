@@ -83,7 +83,7 @@ interface PostDetailContentProps {
 }
 
 const PostDetailContent = ({
-  post: { post_hint, title, url, preview, media, selftext }
+  post: { post_hint, title, url, preview, selftext }
 }: PostDetailContentProps) => {
   switch (post_hint) {
     case 'image':
@@ -92,6 +92,9 @@ const PostDetailContent = ({
     case 'hosted:video':
     case 'link':
     case 'rich:video':
+      if (!preview.reddit_video_preview)
+        return <span>Sorry, we can't display this video!</span>;
+
       return (
         <div className="embed-responsive embed-responsive-1by1">
           <video controls autoPlay loop className="embed-responsive-item">
