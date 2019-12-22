@@ -20,3 +20,16 @@ export const decodeHTML = (html: string) => {
   txt.innerHTML = html;
   return txt.value;
 };
+
+export const getScrollTop = () =>
+  Math.max(
+    window.pageYOffset,
+    document.documentElement.scrollTop,
+    document.body.scrollTop
+  );
+
+export const isInViewportFromTop = (elem: HTMLElement) => {
+  const bounding = elem.getBoundingClientRect();
+
+  return bounding.top >= 0;
+};

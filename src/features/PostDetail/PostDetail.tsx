@@ -4,7 +4,7 @@ import { Error } from 'components/Error';
 import { Spinner } from 'components/Spinner';
 import { StickyCard } from 'components/StickyCard';
 import { useCancellableSWR } from 'hooks/useCancellableSWR';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -52,10 +52,10 @@ const PostDetailWrapped = () => {
   const someCommenters = commentsListing.data.children
     .slice(0, 3)
     .map((x, i) => (
-      <>
-        <AuthorLink key={x.data.author} author={x.data.author} />
+      <Fragment key={x.data.author}>
+        <AuthorLink author={x.data.author} />
         {i < 2 ? ', ' : ''}
-      </>
+      </Fragment>
     ));
 
   return (
@@ -83,7 +83,7 @@ interface PostDetailContentProps {
 }
 
 const PostDetailContent = ({
-  post: { post_hint, title, url, preview, selftext }
+  post: { post_hint, title, url, preview, selftext, secure_media }
 }: PostDetailContentProps) => {
   switch (post_hint) {
     case 'image':
@@ -91,20 +91,21 @@ const PostDetailContent = ({
 
     case 'hosted:video':
     case 'link':
-    case 'rich:video':
-      if (!preview.reddit_video_preview)
+    case 'rich:video': {
+      const { fallback_url } = preview?.reddit_video_preview ??
+        secure_media?.reddit_video ?? { fallback_url: null };
+
+      if (!fallback_url)
         return <span>Sorry, we can't display this video!</span>;
 
       return (
         <div className="embed-responsive embed-responsive-1by1">
           <video controls autoPlay loop className="embed-responsive-item">
-            <source
-              src={preview.reddit_video_preview.fallback_url}
-              type="video/mp4"
-            />
+            <source src={fallback_url} type="video/mp4" />
           </video>
         </div>
       );
+    }
 
     default:
       return <>{selftext && <p>{selftext}</p>}</>;
