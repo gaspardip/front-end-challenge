@@ -20,7 +20,7 @@ interface PostListItemProps {
   post: RedditPost;
 }
 
-const defaultThumbnails = ['default', 'self', 'nsfw'];
+const defaultThumbnails = ['default', 'self', 'nsfw', 'spoiler'];
 
 export const PostListItem = forwardRef<HTMLLIElement, PostListItemProps>(
   (
