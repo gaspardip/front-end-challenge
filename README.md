@@ -24,7 +24,7 @@ There are no tests in this project apart from the default test created by CRA
 - Pagination support (page size = 50)
 - Indicator of unread/read post
 - Dismiss post button
-- Dismiss sll button
+- Dismiss all button
 - Split layout
 - Responsive design (might not be 100% responsive on all devices)
 - Auto-scroll to latest post when loading more
