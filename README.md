@@ -34,6 +34,6 @@ There are no tests in this project apart from the default test created by CRA
 ## Potential improvements
 
 - Add SSR (using Next or similar)
-- Fix post details
+- Fix post details scrolling behavior on mobile so it waits for the post to load
 - UX/UI
 - Display some comments in the detail section
