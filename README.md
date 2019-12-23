@@ -1,11 +1,16 @@
 # Front-end challenge
 
-You can preview the app [here](https://friendly-babbage-6107de.netlify.com/)
+You can preview the app [here](https://friendly-babbage-6107de.netlify.com/) (Netlify)
 
 This project was bootstrapped with [create-react-app](https://github.com/facebook/create-react-app)
 
+## Considerations
+
+There are no tests in this project apart from the default test created by CRA
+
 ## Technologies used
 
+- [TypeScript](https://github.com/microsoft/TypeScript)
 - [React](https://github.com/facebook/react)
 - [Redux](https://github.com/reduxjs/redux)
 - [React-Redux](https://github.com/reduxjs/react-redux)
@@ -16,13 +21,19 @@ This project was bootstrapped with [create-react-app](https://github.com/faceboo
 
 ## Features
 
-- [x] Pagination support
-- [x] Indicator of unread/read post (updated status, after post it’s selected)
-- [x] Dismiss Post Button
-- [x] Dismiss All Button
-- [x] Split layout (left side: all posts / right side: detail post)
-- [x] Responsive design (might not be 100% responsive on all devices)
-- [x] Auto-scroll to latest post when loading more
-- [x] Auto-scroll to post details when loading more on mobile devices
+- Pagination support (page size = 50)
+- Indicator of unread/read post
+- Dismiss post button
+- Dismiss sll button
+- Split layout
+- Responsive design (might not be 100% responsive on all devices)
+- Auto-scroll to latest post when loading more
+- Auto-scroll to post details when loading more on mobile devices
+- Content preview for a variety of formats (though not all of them, specially videos)
 
-##
+## Potential improvements
+
+- Add SSR (using Next or similar)
+- Fix post details
+- UX/UI
+- Display some comments in the detail section
