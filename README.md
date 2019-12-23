@@ -1,44 +1,28 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Front-end challenge
 
-## Available Scripts
+You can preview the app [here](https://friendly-babbage-6107de.netlify.com/)
 
-In the project directory, you can run:
+This project was bootstrapped with [create-react-app](https://github.com/facebook/create-react-app)
 
-### `yarn start`
+## Technologies used
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [React](https://github.com/facebook/react)
+- [Redux](https://github.com/reduxjs/redux)
+- [React-Redux](https://github.com/reduxjs/react-redux)
+- [SWR](https://github.com/zeit/swr)
+- [styled-components (CSS-in-JS)](https://github.com/styled-components/styled-components)
+- [Bootstrap](https://github.com/twbs/bootstrap)
+- [Framer/Motion](https://github.com/framer/motion)
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Features
 
-### `yarn test`
+- [x] Pagination support
+- [x] Indicator of unread/read post (updated status, after post it’s selected)
+- [x] Dismiss Post Button
+- [x] Dismiss All Button
+- [x] Split layout (left side: all posts / right side: detail post)
+- [x] Responsive design (might not be 100% responsive on all devices)
+- [x] Auto-scroll to latest post when loading more
+- [x] Auto-scroll to post details when loading more on mobile devices
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+##
